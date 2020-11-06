@@ -4,15 +4,11 @@ class dashboard {
     userId = null;
 
     constructor () {
-        this.io = io('http://192.168.100.11:1000');
+        this.io = io(); //'http://192.168.100.7:1000'
         this.selectUser();
         this.send();
         this.broadcast();
-        this.onEnter();
-
-        this.io.on('disconnect', function() {
-            this.io.close(); 
-        });
+        this.onEnter(); 
     }
 
     selectUser () {
@@ -58,13 +54,13 @@ class dashboard {
     }
 
     selectUserHistory () {
-        this.io.emit(this.userId, {
+        this.io.emit('history', {
             "type" : "history",
             "to" : this.sendToUserId,
             "from" : this.userId
         });
 
-        this.io.on(this.userId, (info) => {
+        this.io.on('history', (info) => {
             $('.msg_history').html('');
             this.noHistory(info);
             this.loadHistory(info);
@@ -91,8 +87,7 @@ class dashboard {
 
     send () {
         $('.msg_send_btn').click(() => {
-            this.io.emit(this.userId, {
-                "type": "save",
+            this.io.emit('save', {
                 "to" : this.sendToUserId,
                 "from" : this.userId,
                 "mess" : $('.write_msg').val()

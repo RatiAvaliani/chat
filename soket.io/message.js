@@ -1,4 +1,3 @@
-const io = require('socket.io')(global.config.ports.SOKET);
 const {message: messageModule} = require('../schemas/message.schema');
 const user = require('../models/login.model');
 
@@ -10,27 +9,24 @@ class message {
     static connect (req, res) {
         message.userInfo = user.getInfo(req, res);
 
-        io.on('connect', (socket) => new message(socket, req, res));
+        global.io.on('connect', (socket) => new message(req, res));
 
         return message.userInfo;
     }
 
     constructor (socket) { 
         this.socket = socket;
+        console.log('User Connected.');
 
         this.save();
         this.getHistory();
-
-        socket.on('disconnect', function() { 
-            io.sockets.emit('disconnect');
-        });
         
         return;
     }
 
     getHistory () {
-        this.socket.on(message.userInfo.userId, (info) => {
-            if (info.type === "history") {
+        this.socket.on('history', (info) => {
+            console.log(info);
                 (async () => { 
     
                     let messages = await messageModule.find({ 
@@ -48,15 +44,11 @@ class message {
                     
                     this.socket.emit(message.userInfo.userId, messages);
                 })();
-            }
-        });
+            });
     }
 
     save () { 
-         
-        this.socket.on(message.userInfo.userId, (info) => {
-        
-            if (info.type === "save") {
+        this.socket.on('save', (info) => {
                 messageModule({
                     fromUserId: info.from,
                     toUserId: info.to, 
@@ -68,7 +60,6 @@ class message {
                     toUserId: info.to, 
                     message: info.mess
                 });
-            }
         }); 
     }
 }

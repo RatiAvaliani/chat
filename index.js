@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const http = require('http').createServer(server);
+const socket = require('socket.io');
+global.io = socket(http);
 
 /* Adding config as a global variable  */
 global.config = require('./config.json');
