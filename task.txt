@@ -1,0 +1,35 @@
+* crate paths
+    ** /login get and post (SET)
+    ** /register get and post (SET)
+    ** /dashboard get (SET)
+    ** / get
+* register needs
+    ** username (SET)
+    ** email (SET)
+    ** password (SET)
+* login
+    ** email (SET)
+    ** password (SET)
+* create controllers
+    ** login (SET)
+    ** register (SET)
+    ** home (SET)
+    ** dashboard (SET)
+* models
+    ** login (SET)
+        *** tests login info
+    ** register (SET) 
+        *** adds user content to mongodb
+* views
+   ** login (SET) 
+   ** register (SET)
+   ** dashboard (SET)
+   ** home (SET)
+
+* validation when login and registering
+    ** test from mongoose
+* adding notification on login and register pages
+    ** get values from mongoose
+
+* all routes will be added in index and will call *page.init()
+

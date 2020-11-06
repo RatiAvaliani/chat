@@ -1,0 +1,14 @@
+{
+    "ports" : {
+        "DEV" : 80,
+        "SOKET" : 1000,
+        "PRO" : 4000
+    },
+    "session": {
+        "secret": "keyboard cat",
+        "resave": false,
+        "saveUninitialized": true
+    },
+    "connectionMessageName" : "chat_mess",
+    "userTokenName" : "user"
+}
