@@ -1,11 +1,15 @@
-.container{max-width:1170px; margin:auto;}
 img{ max-width:100%;}
+.bg-dark {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
 .users_chat {
   background: #f8f8f8 none repeat scroll 0 0;
   float: left;
   overflow: hidden;
   width: 5%; 
-  border-right:1px solid #c4c4c4;
+  bormessagingder-right:1px solid #c4c4c4;
   cursor: pointer;
 }
 .users_list {
@@ -23,33 +27,45 @@ img{ max-width:100%;}
   margin: 0 auto;
   padding-top: 20px;
 }
-.inbox_people {
+.msg_history {
+  position: relative;
+  bottom: 70px;
+}
+.inbox_people {    
   background: #f8f8f8 none repeat scroll 0 0;
   float: left;
   overflow: hidden;
-  width: 15%; 
-  border-right:1px solid #c4c4c4;
-  height: 50vh;
+  border-right: 1px solid #c4c4c4;
+  height: 93%;
+  bottom: 0px;
+  position: fixed;
+  padding: 0;
 }
 .inbox_msg {
   border: 1px solid #c4c4c4;
   clear: both;
-  overflow: hidden;
-  height: 50vh;
+  padding: 0;
 }
 .top_spac{ margin: 20px 0 0;}
-.recent_heading {float: left; width:40%;}
+.recent_heading { 
+  width:100%;
+}
 .srch_bar {
   display: inline-block;
   text-align: right;
-  width: 60%; padding:
+  width: 60%;
 }
-.headind_srch{ padding:10px 29px 10px 20px; overflow:hidden; border-bottom:1px solid #c4c4c4;}
-
+.headind_srch{ 
+  padding: 10px; 
+  overflow:hidden; 
+  border-bottom:1px solid #c4c4c4;
+} 
 .recent_heading h4 {
   color: #05728f;
   font-size: 21px;
-  margin: auto;
+  padding: 0;
+  margin: 0;
+  display: inline;
 }
 .srch_bar input{ border:1px solid #cdcdcd; border-width:0 0 1px 0; width:80%; padding:2px 0 4px 6px; background:none;}
 .srch_bar .input-group-addon button {
@@ -123,9 +139,8 @@ img{ max-width:100%;}
 }
 .received_withd_msg { width: 57%;}
 .mesgs {
-  float: left;
+  float: right;
   padding: 30px 15px 0 25px;
-  width: 67%;
 }
 
  .sent_msg p {
@@ -152,10 +167,13 @@ img{ max-width:100%;}
 
 .type_msg {
   border-top: 1px solid #c4c4c4;
-  position: absolute;
-  width: inherit;
-  top: 28vw;
+  position: fixed;
+  width: 100%;
+  bottom: 0vw;
   display: block;
+  left: 16.6vw;
+  height: 70px;
+  background-color: #ebebeb;
 }
 .msg_send_btn {
   background: #05728f none repeat scroll 0 0;
@@ -166,19 +184,17 @@ img{ max-width:100%;}
   font-size: 17px;
   height: 33px;
   position: absolute;
-  right: 0;
-  top: 11px;
+  right: 15px;
+  top: 15px;
   width: 33px;
-}
-.msg_history {
-  overflow-y: auto;   
-  height: 21vw;
 }
 .select-to-message {
   text-align: center;
   position: relative;
-  top: 20vh;
+  top: 45vh;
+  left: 15vw;
   color: #05729f;
+  width: 80%;
 }
 .no_history {
   position: relative;
@@ -187,4 +203,51 @@ img{ max-width:100%;}
   color: #417e95;
   font-weight: 700;
   font-size: 15px;
+}
+.write_msg {
+  width: 100%;
+  border: none;
+  background-color: #ebebeb;
+  height: 50px;
+  position: fixed;
+  bottom: 0;
+}
+.write_msg:focus {
+  outline: none;
+}
+.msg_send_btn:focus {
+  outline: none;
+}
+.add-user {
+  font-size: 22px !important;
+  color: #05728f; 
+  float: right;
+  position: relative;
+  left: 30px;
+  top: 3px;
+  cursor: pointer;
+}
+.modal-content {
+  border-radius: 0;
+}
+.modal-header {
+  border: none;
+}
+.modal-header .close {
+  padding: 0;
+  margin: 0;
+}
+.modal-title {
+  color: #05728f;
+}
+.list-group-item {
+  margin: 0;
+  padding: 0;
+}
+.list-group {
+  min-height: 300px;
+}
+::placeholder {
+  position: relative;
+  font-weight: 600;
 }

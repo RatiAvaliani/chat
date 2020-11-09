@@ -1,22 +1,26 @@
 const {message: messageModule} = require('../schemas/message.schema');
-const user = require('../models/login.model');
+const user = require('../models/login.model'); 
 
 class message {
     socket;
 
     static userInfo;
 
-    static connect (req, res) {
+    static connect (req, res, token) {
         message.userInfo = user.getInfo(req, res);
 
-        global.io.on('connect', (socket) => new message(req, res));
+        global.io.on('connect', (socket) => { 
+            if (token === socket.handshake.query.token) {
+                new message(socket);
+            }   
+           // global.io.close();         
+        });
 
         return message.userInfo;
     }
 
-    constructor (socket) { 
+    constructor (socket) {
         this.socket = socket;
-        console.log('User Connected.');
 
         this.save();
         this.getHistory();
@@ -25,8 +29,8 @@ class message {
     }
 
     getHistory () {
-        this.socket.on('history', (info) => {
-            console.log(info);
+        //console.log(this.socket.res.client);
+        this.socket.on('getHistory', (info) => {
                 (async () => { 
     
                     let messages = await messageModule.find({ 
@@ -40,28 +44,28 @@ class message {
                                 toUserId: info.from
                             }
                         ]
-                    });  
+                    });
                     
-                    this.socket.emit(message.userInfo.userId, messages);
+                    this.socket.emit('userHistory', messages);
                 })();
             });
     }
 
     save () { 
-        this.socket.on('save', (info) => {
+        this.socket.on('saveMessage', (info) => {
                 messageModule({
                     fromUserId: info.from,
                     toUserId: info.to, 
                     message: info.mess
                 }).save();
 
-                io.sockets.emit('broadcast', {
+                global.io.sockets.emit('broadcast', {
                     fromUserId: info.from,
                     toUserId: info.to, 
                     message: info.mess
                 });
-        }); 
+        });
     }
 }
 
-module.exports = (req, res) => message.connect(req, res);
+module.exports = (req, res, token) => message.connect(req, res, token);

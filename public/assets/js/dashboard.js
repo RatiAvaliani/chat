@@ -1,22 +1,25 @@
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 class dashboard {
     io = null;
     sendToUserId = null;
     userId = null;
 
     constructor () {
-        this.io = io(); //'http://192.168.100.7:1000'
+        this.io = io('http://192.168.100.7', {query: `token=${$('.messaging').data('token')}`}); //'http://192.168.100.7:1000'
         this.selectUser();
         this.send();
         this.broadcast();
-        this.onEnter(); 
+        this.onEnter();
+        this.userSearchModal();
     }
 
     selectUser () {
         $('.chat_list').click((e) => {
-            this.sendToUserId = $(e.currentTarget).data('user-id');
             $('.chat_list').removeClass('active');
             $(e.currentTarget).addClass('active');
             $('.msg_history').html('');
+            this.sendToUserId = $(e.currentTarget).data('user-id');
             this.selectUserHistory();
             this.showChat();
         });
@@ -36,8 +39,12 @@ class dashboard {
         } 
     }
 
+    userSearchModal () {
+        $('.add-user').click(() => $('#search-usrs').modal('toggle'));
+    }
+
     autoScroll () {
-        $('.msg_history').scrollTop($('.msg_history').height()*10000);
+        $('html').scrollTop($('.msg_history').height());
     }
 
     broadcast () {
@@ -54,13 +61,13 @@ class dashboard {
     }
 
     selectUserHistory () {
-        this.io.emit('history', {
-            "type" : "history",
+        this.io.emit('getHistory', {
+            "type" : "history", 
             "to" : this.sendToUserId,
             "from" : this.userId
         });
 
-        this.io.on('history', (info) => {
+        this.io.on('userHistory', (info) => {
             $('.msg_history').html('');
             this.noHistory(info);
             this.loadHistory(info);
@@ -69,6 +76,12 @@ class dashboard {
     }
 
     loadMessages (info) {
+        let time = new Date();
+        if (info._id !== undefined) {
+            time = new Date(parseInt(info._id.toString().substring(0,8), 16)* 1000);
+        }
+        
+        $('.chat-templates').find(".time_date").text(`${time.getHours()}:${time.getMinutes()} | ${time.getDate()} ${monthNames[time.getMonth()]}`);
         if (info.fromUserId !== this.userId) {
             $('.chat-templates').find(".incoming-user").find('.received_withd_msg > p').text(info.message);
             $('.msg_history').append($('.chat-templates').find(".incoming-user").html());
@@ -87,7 +100,7 @@ class dashboard {
 
     send () {
         $('.msg_send_btn').click(() => {
-            this.io.emit('save', {
+            this.io.emit('saveMessage', {
                 "to" : this.sendToUserId,
                 "from" : this.userId,
                 "mess" : $('.write_msg').val()
@@ -97,4 +110,4 @@ class dashboard {
     }
 }
 
-(new dashboard());
+$( document ).ready(() => (new dashboard())); 
