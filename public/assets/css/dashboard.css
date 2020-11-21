@@ -247,6 +247,22 @@ img{ max-width:100%;}
 .list-group {
   min-height: 300px;
 }
+.chat_add_user {
+  float: right;
+  color: #033948;
+  font-size: 25px;
+  position: relative;
+  top: -15px;
+}
+.list-group .chat_list {
+  cursor: auto;
+}
+.list-group .chat_add_user {
+  cursor: pointer;
+}
+.list-group .chat_list:hover, .list-group .chat_list .active {
+  background-color: #ffffff;
+}
 ::placeholder {
   position: relative;
   font-weight: 600;

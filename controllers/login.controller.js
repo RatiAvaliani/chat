@@ -2,7 +2,7 @@ const loginModel = require('./../models/login.model');
 
 class loginController {
     init (req, res) { 
-        res.render('login', {'errors' : req.flash('errors')[0]});
+        res.render('login', {'errors' : req.flash('errors')[0], 'success' : req.flash('success')[0]});
     }
 
     post (req, res) {

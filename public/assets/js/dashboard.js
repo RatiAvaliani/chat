@@ -12,6 +12,46 @@ class dashboard {
         this.broadcast();
         this.onEnter();
         this.userSearchModal();
+        this.search();
+        this.getIndividualConcatList();
+    }
+
+    loadIndividualContactList (userInfo) { 
+        $('.chat-templates').find('.chat_contact_list').find('h5').text(userInfo.username);
+        $('.chat-templates').find('.chat_contact_list').attr('data-user-id', userInfo.userId);
+
+        $('.inbox_chat').append($('.chat-templates').find('.chat_contact_list').html());
+        
+        //@TODO crate a template for contact list on the left
+        // add groups template as well
+        // loade the template to the left
+    }
+
+    getIndividualConcatList () {
+        $.post('/getIndividualContacts', {}, (info) => {
+            $('.inbox_chat').html('');
+            for (let userId in info.contactList) { 
+                this.loadIndividualContactList(info.contactList[userId]);
+            } 
+        });
+    }
+
+    addUser () {
+        console.log($('.chat_add_user').html());
+        $('.chat_add_user').click((e) => {
+            let userId = $(e.currentTarget).find('.chat_list').data('user-id');
+            $.post('/addIndividualContact', {userId: userId}, (info) => {
+                //@TODO mark user as added
+                if (info.status === false) {
+                    swal({
+                        title: info.message,
+                        icon: "warning"
+                      });
+                } else {
+                    this.getIndividualConcatList();
+                }
+            });
+        });
     }
 
     selectUser () {
@@ -24,6 +64,30 @@ class dashboard {
             this.showChat();
         });
         this.userId = $('.messaging').data('current-user-id');
+    }
+
+    loadeUsers (info) {
+        $('.chat-templates').find('.list-group-item').find('.chat_title').text(info.username);
+        $('.chat-templates').find('.list-group-item').find('.chat_list').attr('data-user-id', info._id);
+        $('.list-group').append($('.chat-templates').find('.list-group-item').html());
+    }
+
+    loadeSearch (info) {
+        $('.list-group').html('');
+        for (let i = 0; i < info.length; i++) {
+            this.loadeUsers(info[i]);
+        }
+        this.addUser();
+    }
+    
+    search () {
+        $('.btn-search').click((e) => {
+            let input = $('#search');
+            let inputVal = input.val();
+            
+            $.post('/searchUsers', {'username': inputVal, 'userId': this.userId}, (userList) => this.loadeSearch(userList));
+            input.val('');
+        });
     }
 
     showChat () {
@@ -58,6 +122,13 @@ class dashboard {
                 $('.msg_send_btn').click();
             }
         });
+
+        $('#search').on("keyup", (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                $('.btn-search').click();
+            }
+        });
     }
 
     selectUserHistory () {
@@ -82,6 +153,7 @@ class dashboard {
         }
         
         $('.chat-templates').find(".time_date").text(`${time.getHours()}:${time.getMinutes()} | ${time.getDate()} ${monthNames[time.getMonth()]}`);
+        
         if (info.fromUserId !== this.userId) {
             $('.chat-templates').find(".incoming-user").find('.received_withd_msg > p').text(info.message);
             $('.msg_history').append($('.chat-templates').find(".incoming-user").html());

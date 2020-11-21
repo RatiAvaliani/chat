@@ -20,12 +20,18 @@ class registerModel {
             user({
                 username,
                 email,
-                password: password
+                password,
+                contactList: {
+                    "5faec5c9885597428c1d8654": {
+                        "username": "ratiavaliani"
+                    }
+                }
             }).save((err) => {
                 if (err !== null) {
                     req.flash('errors', err.errors);
                     res.redirect('/register');
                 } else {
+                    req.flash('success', 'You have registered successfully');
                     res.redirect('/login');
                 }
             }); 

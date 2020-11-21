@@ -17,6 +17,7 @@ const login = require('./controllers/login.controller');
 const register = require('./controllers/register.controller');
 const dashboard = require('./controllers/dashboard.controller');
 const home = require('./controllers/home.controller');
+const user = require('./controllers/user.controller');
 
 /* Middleware */
 const loginMiddleware = require('./middleware/login.middeware');
@@ -50,6 +51,12 @@ server.post('/login', loginMiddleware.loggedIn, login.post);
 server.get('/register', loginMiddleware.loggedIn, register.init);
 
 server.post('/register', loginMiddleware.loggedIn, register.post);
+
+server.post('/searchUsers', user.searchUsers);
+
+server.post('/addIndividualContact', user.addContact);
+
+server.post('/getIndividualContacts', user.getContacts);
 
 http.listen(global.config.ports.DEV, () => {
     console.log('App is running');

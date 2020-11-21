@@ -10,26 +10,31 @@
                 <i class="fa fa-user-plus col-4 add-user"></i>
               </div>
             </div>
-            <div class="inbox_chat">
-              <% for(let user of users) { %>
-                  <div class="chat_list" data-user-id="<%- user._id -%>">
-                    <div class="chat_people">
-                      <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                      <div class="chat_ib">
-                        <h5><%- user.username -%></h5>
-                      </div>
-                    </div>
-                  </div>
-              <% } %>
-            </div>
+            <div class="inbox_chat"></div>
           </div>
           <div class="select-to-message col-md-12">
             <h4>Welcome!  Select user or group to start chatting.</h4>
           </div>
           <div class="d-none chat-templates col-md-12">
+          
+            <div class="chat_contact_list">
+            <div class="chat_list" data-user-id="">
+              <div class="chat_people">
+                <div class="chat_img">
+                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
+                </div>
+                <div class="chat_ib">
+                  <h5></h5>
+                </div>
+              </div>
+            </div>
+          </div>
+
             <div class="incoming-user">
               <div class="incoming_msg">
-                <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
+                <div class="incoming_msg_img"> 
+                  <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
+                </div>
                 <div class="received_msg">
                   <div class="received_withd_msg">
                     <p></p>
@@ -46,6 +51,20 @@
               </div>
             </div>
 
+            <li class="list-group-item">
+              <div class="chat_list" data-user-id="">
+                <div class="chat_people">
+                  <div class="chat_img"> 
+                    <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> 
+                  </div>
+                  <div class="chat_ib">
+                    <h5 class="chat_title"></h5>
+                  </div>
+                  <div class="chat_add_user"><i class="fa fa-plus"></i></div>
+                </div>
+              </div>
+            </li>
+
           </div>
           <div class="col-lg-10 col-md-12 mesgs d-none"> 
             <div class="msg_history"></div>
@@ -55,6 +74,7 @@
             <div class="input_msg_write">
               <textarea class="write_msg" placeholder="Type a message" cols="30" rows="10"></textarea>
               <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+              <!--<button class="msg_send_btn" type="button"><i class="fa fa-paperclip" aria-hidden="true"></i></button>-->
             </div>
           </div>
         </div>
@@ -72,22 +92,13 @@
           </div>
           <div class="modal-body">
             <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Search Username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <input type="text" class="form-control" id="search" placeholder="Search Username">
               <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Search</button>
+                <button class="btn btn-outline-secondary btn-search" type="button"><i class="fa fa-search"></i></button>
               </div>
             </div>
             <ul class="list-group">
-              <li class="list-group-item">
-                <div class="chat_list" data-user-id="">
-                  <div class="chat_people">
-                    <div class="chat_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-                    <div class="chat_ib">
-                      <h5>aasasda asd ads</h5>
-                    </div>
-                  </div>
-                </div>
-              </li>
+              
             </ul>
           </div>
         </div>
