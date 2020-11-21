@@ -6,7 +6,7 @@ class dashboard {
     userId = null;
 
     constructor () {
-        this.io = io('http://192.168.100.7', {query: `token=${$('.messaging').data('token')}`}); //'http://192.168.100.7:1000'
+        this.io = io('http://192.168.100.11', {query: `token=${$('.messaging').data('token')}`}); //'http://192.168.100.7:1000'
         this.selectUser();
         this.send();
         this.broadcast();
@@ -16,11 +16,16 @@ class dashboard {
         this.getIndividualConcatList();
     }
 
-    loadIndividualContactList (userInfo) { 
-        $('.chat-templates').find('.chat_contact_list').find('h5').text(userInfo.username);
-        $('.chat-templates').find('.chat_contact_list').attr('data-user-id', userInfo.userId);
+    loadIndividualContactList (userInfo) {
+        try {
+            $('.chat-templates').find('.chat_contact_list').find('h5').text(userInfo.username);
+            $('.chat-templates').find('.chat_contact_list').attr('data-user-id', userInfo.userId);
 
-        $('.inbox_chat').append($('.chat-templates').find('.chat_contact_list').html());
+            $('.inbox_chat').append($('.chat-templates').find('.chat_contact_list').html());
+        } catch (e) {
+            // @TODO add server logs
+        }
+        
         
         //@TODO crate a template for contact list on the left
         // add groups template as well
@@ -28,18 +33,20 @@ class dashboard {
     }
 
     getIndividualConcatList () {
+        global.setLoaderGif('.inbox_people');
         $.post('/getIndividualContacts', {}, (info) => {
-            $('.inbox_chat').html('');
-            for (let userId in info.contactList) { 
+            $('.inbox_chat').html(''); 
+            global.removeLoaderGif('.inbox_people');
+            for (let userId in info.contactList) {
                 this.loadIndividualContactList(info.contactList[userId]);
             } 
         });
     }
 
     addUser () {
-        console.log($('.chat_add_user').html());
         $('.chat_add_user').click((e) => {
-            let userId = $(e.currentTarget).find('.chat_list').data('user-id');
+            let userId = $(e.currentTarget).parent().parent().data('user-id');
+            
             $.post('/addIndividualContact', {userId: userId}, (info) => {
                 //@TODO mark user as added
                 if (info.status === false) {
@@ -48,6 +55,7 @@ class dashboard {
                         icon: "warning"
                       });
                 } else {
+                    $(e.currentTarget).find('i').removeClass('fa-plus').addClass('fa-check-circle');
                     this.getIndividualConcatList();
                 }
             });
@@ -66,16 +74,17 @@ class dashboard {
         this.userId = $('.messaging').data('current-user-id');
     }
 
-    loadeUsers (info) {
+    loadUsers (info) {
         $('.chat-templates').find('.list-group-item').find('.chat_title').text(info.username);
         $('.chat-templates').find('.list-group-item').find('.chat_list').attr('data-user-id', info._id);
         $('.list-group').append($('.chat-templates').find('.list-group-item').html());
     }
 
-    loadeSearch (info) {
+    loadSearch (info) {
+        global.removeLoaderGif('.list-group');
         $('.list-group').html('');
         for (let i = 0; i < info.length; i++) {
-            this.loadeUsers(info[i]);
+            this.loadUsers(info[i]);
         }
         this.addUser();
     }
@@ -85,7 +94,8 @@ class dashboard {
             let input = $('#search');
             let inputVal = input.val();
             
-            $.post('/searchUsers', {'username': inputVal, 'userId': this.userId}, (userList) => this.loadeSearch(userList));
+            global.setLoaderGif('.list-group');
+            $.post('/searchUsers', {'username': inputVal, 'userId': this.userId}, (userList) => this.loadSearch(userList));
             input.val('');
         });
     }

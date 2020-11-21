@@ -263,6 +263,12 @@ img{ max-width:100%;}
 .list-group .chat_list:hover, .list-group .chat_list .active {
   background-color: #ffffff;
 }
+.gif_blur {
+  filter: brightness(0.5) blur(1px);
+}
+.gif {
+  position: absolute;
+}
 ::placeholder {
   position: relative;
   font-weight: 600;

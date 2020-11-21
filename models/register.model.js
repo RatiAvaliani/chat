@@ -22,8 +22,8 @@ class registerModel {
                 email,
                 password,
                 contactList: {
-                    "5faec5c9885597428c1d8654": {
-                        "username": "ratiavaliani"
+                    "5fb94d9c19d1732c083607a5": {
+                        "username": "Chat Bot"
                     }
                 }
             }).save((err) => {
